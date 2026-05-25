@@ -11,7 +11,7 @@ export function addToCart(productId, selectedValue) {
     cart.push({
       id: productId,
       quantity: selectedValue,
-      DeliveryOptionId: "1",
+      deliveryOptionId: "1"
     });
   }
   saveIntoLocal();

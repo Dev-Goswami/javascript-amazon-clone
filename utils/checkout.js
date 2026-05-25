@@ -1,9 +1,8 @@
 import { fixmoneyDesimal } from "./money.js";
-import { cart,saveIntoLocal} from "../data/cart.js";
-import { products,getProduct } from "../data/products.js";
+import { cart, saveIntoLocal } from "../data/cart.js";
+import { products, getProduct } from "../data/products.js";
 import { deliveryOptions } from "../data/deliveryOptions.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-
 
 export function updateCheckoutItem() {
   let total = 0;
@@ -37,35 +36,36 @@ export function updateCheckoutItem() {
   let EstimatedTax = totalMoneyBeforeTax * 0.1;
   let totalMoneyAfterTax = totalMoneyBeforeTax + EstimatedTax;
 
-  const updataTaxt = (slector,value)=>{
+  const updataTaxt = (slector, value) => {
     const HTMltag = document.querySelector(slector);
-    if(HTMltag){
+    if (HTMltag) {
       HTMltag.innerText = fixmoneyDesimal(value);
-    }
-    else{
+    } else {
       console.error(`not found ${slector} `);
     }
-  }
-   
-  updataTaxt(".totalItemsPrice",totalPriceCents);
-  updataTaxt(".totalShipingCost",totalDeliveryCostCents);
-  updataTaxt(".totalMoneyBeforeTax",totalMoneyBeforeTax);
-  updataTaxt(".EstimatedTax",EstimatedTax);
-  updataTaxt(".totalMoneyAfterTax",totalMoneyAfterTax);
+  };
 
-//   after calculate then save it inot local
-  saveIntoLocal();
+  updataTaxt(".totalItemsPrice", totalPriceCents);
+  updataTaxt(".totalShipingCost", totalDeliveryCostCents);
+  updataTaxt(".totalMoneyBeforeTax", totalMoneyBeforeTax);
+  updataTaxt(".EstimatedTax", EstimatedTax);
+  updataTaxt(".totalMoneyAfterTax", totalMoneyAfterTax);
 
+  //   after calculate then save it inot local
 }
 
+let carthtml = "";
 
-  let carthtml='';
-  cart.forEach((item)=>{
-   const prodcut = getProduct(item);
+cart.forEach((item) => {
+  const prodcut = getProduct(item);
 
-    carthtml+=`<div class="cart-item-container">
+  const delivery = deliveryOptions.find((o) => o.id === item.deliveryOptionId);
+  const today = dayjs().add(delivery.deliveryDays, "days");
+  const delivaryDate = today.format("dddd, MMMM D");
+
+  carthtml += `<div class="cart-item-container">
             <div class="delivery-date">
-              Delivery date: Wednesday, June 15
+              Delivery date:  ${delivaryDate}
             </div>
 
             <div class="cart-item-details-grid">
@@ -97,48 +97,41 @@ export function updateCheckoutItem() {
                   Choose a delivery option:
                 </div>
 
-                <div class="delivery-option">
-                  <input type="radio" class="delivery-option-input"
-                    name="delivery-option-${prodcut.id}">
-                  <div>
-                    <div class="delivery-option-date">
-                      Tuesday, June 21
-                    </div>
-                    <div class="delivery-option-price">
-                      FREE Shipping
-                    </div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input type="radio" checked class="delivery-option-input"
-                    name="delivery-option-${prodcut.id}">
-                  <div>
-                    <div class="delivery-option-date">
-                      Wednesday, June 15
-                    </div>
-                    <div class="delivery-option-price">
-                      $4.99 - Shipping
-                    </div>
-                  </div>
-                </div>
-                <div class="delivery-option">
-                  <input type="radio" class="delivery-option-input"
-                    name="delivery-option-${prodcut.id}">
-                  <div>
-                    <div class="delivery-option-date">
-                      Monday, June 13
-                    </div>
-                    <div class="delivery-option-price">
-                      $9.99 - Shipping
-                    </div>
-                  </div>
-                </div>
+                ${deliveryOption(item)}
               </div>
             </div>
           </div>
-        </div>`
+        </div>`;
+});
+
+document.querySelector(".js-order-summary").innerHTML = carthtml;
+
+
+function deliveryOption(cartItem) {
+  let options = "";
+  deliveryOptions.forEach((option) => {
+    const today = dayjs().add(option.deliveryDays, "days");
+    const delivaryDate = today.format("dddd, MMMM D");
+    const deliveryCost =
+      option.priceCents === 0
+        ? "FREE"
+        : `$ ${fixmoneyDesimal(option.priceCents)}`;
+    const isChecked = cartItem.deliveryOptionId === option.id;
+
+    options += `<div class="delivery-option">
+                  <input type="radio" class="delivery-option-input"
+                  ${isChecked ? "checked" : ""}
+                    name="delivery-option-${cartItem.id}"
+                    >
+                  <div>
+                    <div class="delivery-option-date">
+                     "${delivaryDate}"
+                    </div>
+                    <div class="delivery-option-price">
+                      ${deliveryCost} -Shopping
+                    </div>
+                  </div>
+                </div>`;
   });
- console.log(carthtml);
-  document.querySelector('.js-order-summary').innerHTML = carthtml;
-
-
+  return options;
+}
