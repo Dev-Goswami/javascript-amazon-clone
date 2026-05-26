@@ -17,3 +17,8 @@ export function addToCart(productId, selectedValue) {
   saveIntoLocal();
   // console.log(cart);
 }
+ export function updateDeliveryOption(productId,deliveryOptionId){
+  let cartItem = cart.find((item)=>item.id===productId);
+  cartItem.deliveryOptionId = deliveryOptionId;
+  saveIntoLocal();
+}

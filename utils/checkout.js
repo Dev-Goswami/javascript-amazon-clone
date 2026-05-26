@@ -1,10 +1,10 @@
 import { fixmoneyDesimal } from "./money.js";
-import { cart, saveIntoLocal } from "../data/cart.js";
+import { cart, saveIntoLocal, updateDeliveryOption } from "../data/cart.js";
 import { products, getProduct } from "../data/products.js";
 import { deliveryOptions } from "../data/deliveryOptions.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 
-export function updateCheckoutItem() {
+export function UpdatePaymentSummry() {
   let total = 0;
 
   let totalPriceCents = 0;
@@ -18,14 +18,11 @@ export function updateCheckoutItem() {
     if (product) {
       totalPriceCents += item.quantity * product.priceCents;
     }
-
-    let checkedRadio = document.querySelector(
-      `input[name="delivery-option-${item.id}"]:checked`,
+    const deliveryOptionId = item.deliveryOptionId;
+    const deliveryOption = deliveryOptions.find(
+      (option) => option.id === deliveryOptionId,
     );
-
-    if (checkedRadio) {
-      totalDeliveryCostCents += Number(checkedRadio.value);
-    }
+    totalDeliveryCostCents += deliveryOption.priceCents;
   });
 
   document.querySelectorAll(".total-items-in-cart").forEach((text) => {
@@ -53,17 +50,18 @@ export function updateCheckoutItem() {
 
   //   after calculate then save it inot local
 }
+function updateOrderSummary() {
+  let carthtml = "";
+  cart.forEach((item) => {
+    const prodcut = getProduct(item.id);
 
-let carthtml = "";
+    const delivery = deliveryOptions.find(
+      (o) => o.id === item.deliveryOptionId,
+    );
+    const today = dayjs().add(delivery.deliveryDays, "days");
+    const delivaryDate = today.format("dddd, MMMM D");
 
-cart.forEach((item) => {
-  const prodcut = getProduct(item);
-
-  const delivery = deliveryOptions.find((o) => o.id === item.deliveryOptionId);
-  const today = dayjs().add(delivery.deliveryDays, "days");
-  const delivaryDate = today.format("dddd, MMMM D");
-
-  carthtml += `<div class="cart-item-container">
+    carthtml += `<div class="cart-item-container">
             <div class="delivery-date">
               Delivery date:  ${delivaryDate}
             </div>
@@ -77,7 +75,7 @@ cart.forEach((item) => {
                   ${prodcut.name}
                 </div>
                 <div class="product-price">
-                  ${prodcut.priceCents}
+                  ${fixmoneyDesimal(prodcut.priceCents)}
                 </div>
                 <div class="product-quantity">
                   <span>
@@ -102,10 +100,12 @@ cart.forEach((item) => {
             </div>
           </div>
         </div>`;
-});
+  });
 
-document.querySelector(".js-order-summary").innerHTML = carthtml;
-
+  
+   document.querySelector(".js-order-summary").innerHTML = carthtml;
+ 
+}
 
 function deliveryOption(cartItem) {
   let options = "";
@@ -118,7 +118,9 @@ function deliveryOption(cartItem) {
         : `$ ${fixmoneyDesimal(option.priceCents)}`;
     const isChecked = cartItem.deliveryOptionId === option.id;
 
-    options += `<div class="delivery-option">
+    options += `<div class="delivery-option js-delivery-option"
+                    data-product-id="${cartItem.id}"
+                    data-delivery-option-id="${option.id}">
                   <input type="radio" class="delivery-option-input"
                   ${isChecked ? "checked" : ""}
                     name="delivery-option-${cartItem.id}"
@@ -135,3 +137,13 @@ function deliveryOption(cartItem) {
   });
   return options;
 }
+
+updateOrderSummary();
+document.querySelector(".js-order-summary").addEventListener("click", (event) => {
+    const element = event.target.closest(".js-delivery-option");
+    
+    if (!element) return;
+    const { productId, deliveryOptionId } = element.dataset;
+    updateDeliveryOption(productId, deliveryOptionId);
+    updateOrderSummary();
+  });

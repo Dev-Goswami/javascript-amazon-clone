@@ -1,5 +1,5 @@
-export function getProduct(item) {
-  const prodcut = products.find((P) => P.id === item.id);
+export function getProduct(itemId) {
+  const prodcut = products.find((P) => P.id === itemId);
   if (!prodcut) console.error("item is not founded");
   return prodcut;
 }
