@@ -1,7 +1,7 @@
 import { products } from "../data/products.js";
 import { fixmoneyDesimal } from "./money.js";
 import { addToCart } from "../data/cart.js";
-console.log("amazon.js is concepted");
+
 let productHtml = "";
 products.forEach((product) => {
   productHtml += `<div class="product-container">
@@ -57,19 +57,21 @@ products.forEach((product) => {
 // here we generate html for product
 document.querySelector(".js-products-grid").innerHTML = productHtml;
 
-// now add to cart button is work
+document
+  .querySelector(".js-products-grid")
+  .addEventListener("click", (event) => {
+    //if i click on add to cart button then this capture 
+    const addToCartBtn = event.target.closest(".js-add-to-card");
 
-document.querySelectorAll(".js-add-to-card").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const productId = btn.dataset.productId;
-    let selectedValue = 1;
-    const productContainer = btn.closest(".product-container");
-    const selectedQuntity = productContainer.querySelector(
-      ".js-select-product-quntity",
-    );
-    if (selectedQuntity) selectedValue = Number(selectedQuntity.value);
+    if  (addToCartBtn) {
+      const productId = addToCartBtn.dataset.productId;
+      let selectedValue = 1;
+      const productContainer = addToCartBtn.closest(".product-container");
+      const selectedQuntity = productContainer.querySelector(
+        ".js-select-product-quntity",
+      );
+      if (selectedQuntity) selectedValue = Number(selectedQuntity.value);
 
-    addToCart(productId, selectedValue); //add prodcut into cart  with quantity localy
-    
+      addToCart(productId, selectedValue); //add prodcut into cart  with quantity localy
+    }
   });
-});
