@@ -1,6 +1,6 @@
 import { products } from "../data/products.js";
 import { fixmoneyDesimal } from "./money.js";
-import { addToCart } from "../data/cart.js";
+import { addToCart, cart} from "../data/cart.js";
 
 let productHtml = "";
 products.forEach((product) => {
@@ -47,7 +47,7 @@ products.forEach((product) => {
             <img src="images/icons/checkmark.png">
             Added
           </div>
-
+          
           <button class="add-to-cart-button button-primary js-add-to-card" data-product-id = "${product.id}">
             Add to Cart
           </button>
@@ -56,6 +56,7 @@ products.forEach((product) => {
 
 // here we generate html for product
 document.querySelector(".js-products-grid").innerHTML = productHtml;
+
 
 document
   .querySelector(".js-products-grid")
@@ -73,5 +74,6 @@ document
       if (selectedQuntity) selectedValue = Number(selectedQuntity.value);
 
       addToCart(productId, selectedValue); //add prodcut into cart  with quantity localy
+      
     }
   });
