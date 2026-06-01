@@ -15,9 +15,10 @@ export function addToCart(productId, selectedValue) {
       isEditing: false,
     });
   }
+ 
+  
   saveIntoLocal();
-  console.log("we are in addtocart function");
-  console.log(cart);
+  
 }
 export function updateDeliveryOption(productId, deliveryOptionId) {
   let cartItem = cart.find((item) => item.id === productId);
@@ -31,6 +32,7 @@ export function updateCartQuantity(productId, updatedQuantity) {
   saveIntoLocal();
 }
 export function changeCartState(productId) {
+  
   let cartItem = cart.find((item) => item.id === productId);
 
   cartItem.isEditing = !cartItem.isEditing;
@@ -39,7 +41,16 @@ export function changeCartState(productId) {
 
 export function deleteCartQuantity(productId) {
 
-  cart = cart.filter(item => item.id !== productId);
+  
+  const filteredCart = cart.filter(
+  item => item.id !== productId
+);
+
+cart.length = 0;
+
+filteredCart.forEach(item => {
+  cart.push(item);
+});
 
 saveIntoLocal();
   
