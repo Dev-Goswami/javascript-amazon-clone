@@ -61,5 +61,7 @@ export function totalCartItem(){
   cart.forEach((item)=>{
     total+=item.quantity;
   });
-  return total;
+  return (total<99)?total:"99+";
+  
+  
 }
