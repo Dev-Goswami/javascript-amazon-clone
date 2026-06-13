@@ -1,6 +1,9 @@
 import { products } from "../data/products.js";
 import { fixmoneyDesimal } from "./money.js";
-import { addToCart, cart} from "../data/cart.js";
+import { addToCart, cart,totalCartItem} from "../data/cart.js";
+
+//show currrent cart's item quantity 
+document.querySelector('.total-items-in-cart').innerText = totalCartItem();
 
 let productHtml = "";
 products.forEach((product) => {
@@ -72,8 +75,7 @@ document
         ".js-select-product-quntity",
       );
       if (selectedQuntity) selectedValue = Number(selectedQuntity.value);
-
       addToCart(productId, selectedValue); //add prodcut into cart  with quantity localy
-      
+      document.querySelector('.total-items-in-cart').innerText = totalCartItem();
     }
   });

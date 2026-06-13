@@ -11,57 +11,65 @@ import { products, getProduct } from "../data/products.js";
 import { deliveryOptions } from "../data/deliveryOptions.js";
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
 
-// export function UpdatePaymentSummry() {
-//   let total = 0;
+export function UpdatePaymentSummry() {
 
-//   let totalPriceCents = 0;
+  let total = 0;
+  let totalPriceCents = 0;
+  let totalDeliveryCostCents = 0;
+  
+  //total calculation from cart items
+  cart.forEach((item) => {
+    total += item.quantity;
 
-//   let totalDeliveryCostCents = 0;
-//   cart.forEach((item) => {
-//     total += item.quantity;
+    const product = products.find((P) => P.id === item.id);
 
-//     const product = products.find((P) => P.id === item.id);
+    if (product) {
+      totalPriceCents += item.quantity * product.priceCents;
+    }
+    const deliveryOptionId = item.deliveryOptionId;
+    const deliveryOption = deliveryOptions.find(
+      (option) => option.id === deliveryOptionId,
+    );
+    totalDeliveryCostCents += deliveryOption.priceCents;
+  });
 
-//     if (product) {
-//       totalPriceCents += item.quantity * product.priceCents;
-//     }
-//     const deliveryOptionId = item.deliveryOptionId;
-//     const deliveryOption = deliveryOptions.find(
-//       (option) => option.id === deliveryOptionId,
-//     );
-//     totalDeliveryCostCents += deliveryOption.priceCents;
-//   });
+  document.querySelectorAll(".total-items-in-cart").forEach((text) => {
+    text.innerText = total;
+  
+    
+  });
 
-//   document.querySelectorAll(".total-items-in-cart").forEach((text) => {
-//     text.innerText = total;
-//   });
+  
+  let totalMoneyBeforeTax = totalPriceCents + totalDeliveryCostCents;
+  let EstimatedTax = totalMoneyBeforeTax * 0.1;
+  let totalMoneyAfterTax = totalMoneyBeforeTax + EstimatedTax;
 
-//   let totalMoneyBeforeTax = totalPriceCents + totalDeliveryCostCents;
-//   let EstimatedTax = totalMoneyBeforeTax * 0.1;
-//   let totalMoneyAfterTax = totalMoneyBeforeTax + EstimatedTax;
+  const paymentSummary = document.querySelector('.js-payment-summary');
 
-//   const updataTaxt = (slector, value) => {
-//     const HTMltag = document.querySelector(slector);
-//     if (HTMltag) {
-//       HTMltag.innerText = fixmoneyDesimal(value);
-//     } else {
-//       console.error(`not found ${slector} `);
-//     }
-//   };
+  
+  const updataTaxt = (paymentSummary,slector, value) => {
+    const HTMltag = paymentSummary.querySelector(slector);
+    if (HTMltag) {
+      HTMltag.innerText = fixmoneyDesimal(value);
+    } else {
+      console.error(`not found ${slector} `);
+    }
+  };
 
-//   updataTaxt(".totalItemsPrice", totalPriceCents);
-//   updataTaxt(".totalShipingCost", totalDeliveryCostCents);
-//   updataTaxt(".totalMoneyBeforeTax", totalMoneyBeforeTax);
-//   updataTaxt(".EstimatedTax", EstimatedTax);
-//   updataTaxt(".totalMoneyAfterTax", totalMoneyAfterTax);
+  updataTaxt(paymentSummary,".totalItemsPrice", totalPriceCents);
+  updataTaxt(paymentSummary,".totalShipingCost", totalDeliveryCostCents);
+  updataTaxt(paymentSummary,".totalMoneyBeforeTax", totalMoneyBeforeTax);
+  updataTaxt(paymentSummary,".EstimatedTax", EstimatedTax);
+  updataTaxt(paymentSummary,".totalMoneyAfterTax", totalMoneyAfterTax);
 
-//   //   after calculate then save it inot local
-// }
+  //   after calculate then save it inot local
+}
+
 function updateOrderSummary() {
 let carthtml = "";
   cart.forEach((item) => {
-  console.log(item);
-  console.log(cart);
+  // console.log(item);
+  // console.log(cart);
   const product = getProduct(item.id);
 
   const delivery = deliveryOptions.find(
@@ -122,6 +130,8 @@ let carthtml = "";
   });
 
   document.querySelector(".js-order-summary").innerHTML = carthtml;
+  UpdatePaymentSummry();
+
 }
 function cartCurrentState(itemId) {
   const cartItem = cart.find((item) => item.id === itemId);
@@ -183,6 +193,7 @@ function deliveryOption(cartItem) {
 
 updateOrderSummary();
 
+
 document
   .querySelector(".js-order-summary")
   .addEventListener("click", (event) => {
@@ -201,6 +212,7 @@ document
       updateDeliveryOption(productId, deliveryOptionId);
 
       updateOrderSummary();
+      // UpdatePaymentSummry();
       return;
     }
 
@@ -211,6 +223,7 @@ document
       changeCartState(productId);
 
       updateOrderSummary();
+      // UpdatePaymentSummry();
       return;
     }
 
@@ -241,6 +254,7 @@ document
       changeCartState(productId);
 
       updateOrderSummary();
+      // UpdatePaymentSummry();
 
       return;
     }
@@ -248,6 +262,7 @@ document
       const productId = deleteQuntity.dataset.productId;
       deleteCartQuantity(productId);
       updateOrderSummary();
+      // UpdatePaymentSummry();
       return;
     }
   });
