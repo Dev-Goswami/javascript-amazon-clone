@@ -65,3 +65,10 @@ export function totalCartItem(){
   
   
 }
+export  function getCartItem(itemID){
+  const targetItem = cart.find((item)=>item.id===itemID);
+
+  if(targetItem) return targetItem;
+
+  else console.error('Product is not exit in cart');
+}
