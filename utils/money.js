@@ -1,4 +1,3 @@
-export function fixmoneyDesimal(pricCend){
-    return (pricCend/100).toFixed(2);
-
+export function fixmoneyDesimal(priceCenst) {
+  return (Math.round(priceCenst) / 100).toFixed(2);
 }
