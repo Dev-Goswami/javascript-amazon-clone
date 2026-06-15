@@ -1,10 +1,18 @@
-export let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+console.log("cart.js FILE LOADED");
+
+export let cart;
+export function loadCart() {
+  cart = JSON.parse(localStorage.getItem("cart")) || [];
+}
+// loadCart();
 
 export function saveIntoLocal() {
   localStorage.setItem("cart", JSON.stringify(cart));
 }
-export function addToCart(productId, selectedValue) {
-  let cartItem = cart.find((cartItem) => cartItem.id === productId);
+
+export function addToCart(productId, selectedValue = 1) {
+  let cartItem = getCartItem(productId);
 
   if (cartItem) cartItem.quantity += selectedValue;
   else {
@@ -15,10 +23,8 @@ export function addToCart(productId, selectedValue) {
       isEditing: false,
     });
   }
- 
-  
+
   saveIntoLocal();
-  
 }
 export function updateDeliveryOption(productId, deliveryOptionId) {
   let cartItem = cart.find((item) => item.id === productId);
@@ -32,7 +38,6 @@ export function updateCartQuantity(productId, updatedQuantity) {
   saveIntoLocal();
 }
 export function changeCartState(productId) {
-  
   let cartItem = cart.find((item) => item.id === productId);
 
   cartItem.isEditing = !cartItem.isEditing;
@@ -40,35 +45,23 @@ export function changeCartState(productId) {
 }
 
 export function deleteCartQuantity(productId) {
+  const filteredCart = cart.filter((item) => item.id !== productId);
 
-  
-  const filteredCart = cart.filter(
-  item => item.id !== productId
-);
+  cart.length = 0;
 
-cart.length = 0;
-
-filteredCart.forEach(item => {
-  cart.push(item);
-});
-
-saveIntoLocal();
-  
-
-}
-export function totalCartItem(){
-  let total =0;
-  cart.forEach((item)=>{
-    total+=item.quantity;
+  filteredCart.forEach((item) => {
+    cart.push(item);
   });
-  return (total<99)?total:"99+";
-  
-  
+
+  saveIntoLocal();
 }
-export  function getCartItem(itemID){
-  const targetItem = cart.find((item)=>item.id===itemID);
-
-  if(targetItem) return targetItem;
-
-  else console.error('Product is not exit in cart');
+export function totalCartItem() {
+  let total = 0;
+  cart.forEach((item) => {
+    total += item.quantity;
+  });
+  return total < 99 ? total : "99+";
+}
+export function getCartItem(itemID) {
+  return cart.find((item) => item.id === itemID);
 }

@@ -3,8 +3,8 @@ import { updateOrderSummary ,orderSummaryClickEvent} from "./checkout/orderSumma
 
 
 updateOrderSummary();
-document
-  .querySelector(".js-order-summary")
+
+document.querySelector(".js-order-summary")
   .addEventListener("click",orderSummaryClickEvent);
   
 

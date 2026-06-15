@@ -1,5 +1,4 @@
-import { fixmoneyDesimal } from "../../../utils/money.js";
-
+import { fixmoneyDesimal } from '../../../data/cart.js';
 
 
 describe('ths test fixmoneyDisimal fuction',()=>{
