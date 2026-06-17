@@ -1,7 +1,7 @@
 import { products } from "../data/products.js";
 import { fixmoneyDesimal } from "./money.js";
 import { addToCart, cart,totalCartItem} from "../data/cart.js";
-
+import './bootstrap.js';
 //show currrent cart's item quantity 
 document.querySelector('.total-items-in-cart').innerText = totalCartItem();
 

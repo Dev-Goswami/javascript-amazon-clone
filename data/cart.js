@@ -1,11 +1,10 @@
-
 console.log("cart.js FILE LOADED");
-
+let _storage = localStorage;
 export let cart;
-export function loadCart() {
-  cart = JSON.parse(localStorage.getItem("cart")) || [];
+export function loadCart(storageEngin) {
+  _storage = storageEngin;
+  cart = JSON.parse(_storage.getItem("cart")) || [];
 }
-// loadCart();
 
 export function saveIntoLocal() {
   localStorage.setItem("cart", JSON.stringify(cart));

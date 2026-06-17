@@ -16,7 +16,7 @@ Object.defineProperty(window, "localStorage", {
   value: localStorageMock,
   writable: true,
 });
-loadCart();
+loadCart(mockStorage);
 
 
 describe("test suite for add_to_cart function ", () => {
