@@ -2,24 +2,35 @@
 class Product{
   id;
   name;
-  
+
 }
 export let products =[];
-export function loadProducts(fun){
+export function loadProductFatch(){
+  return fetch('https://supersimplebackend.dev/products')
+  .then((response)=>{
+    return response.json();
+  })
+  .then((prodcutsData)=>{
+      products = prodcutsData;
 
-      const xhr =  new XMLHttpRequest();
-      xhr.addEventListener('load',()=>{
-        products = JSON.parse(xhr.response);
-        // console.log(backP);
-        if(typeof fun ==='function'){
-          fun();
-        }
-         
-      });
-      xhr.open('GET','https://supersimplebackend.dev/products');
-      xhr.send();
+  });//end of promoses
+  
 }
-loadProducts();
+// export function loadProducts(fun){
+
+//       const xhr =  new XMLHttpRequest();
+//       xhr.addEventListener('load',()=>{
+//         products = JSON.parse(xhr.response);
+//         // console.log(backP);
+//         if(typeof fun ==='function'){
+//           fun();
+//         }
+         
+//       });
+//       xhr.open('GET','https://supersimplebackend.dev/products');
+//       xhr.send();
+// }
+// loadProducts();
 
 
 export function getProduct(itemId) {
