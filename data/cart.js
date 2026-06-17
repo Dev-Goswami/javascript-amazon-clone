@@ -1,4 +1,4 @@
-console.log("cart.js FILE LOADED");
+
 
 let _storage = null;
 export let cart =[];

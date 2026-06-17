@@ -1,7 +1,7 @@
 import { cart } from "../../data/cart.js";
 import { getDliveryOptions } from "../../data/deliveryOptions.js";
 import { getProduct } from "../../data/products.js";
-import { fixmoneyDesimal } from "../money.js";
+import { fixmoneyDesimal } from "../../utils/money.js";
 
  export function UpdatePaymentSummry() {
 

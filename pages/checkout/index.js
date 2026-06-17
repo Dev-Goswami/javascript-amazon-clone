@@ -1,10 +1,10 @@
 import {
   updateOrderSummary,
   orderSummaryClickEvent
-} from "./checkout/orderSummary.js";
+} from "./orderSummary.js";
 
 // import "./backendPrectic.js";
-import './bootstrap.js';
+import '../../utils/bootstrap.js';
 
 updateOrderSummary();
 

@@ -1,17 +1,16 @@
 import {cart,
-  loadCart,
   saveIntoLocal,
   updateDeliveryOption,
   updateCartQuantity,
   changeCartState,
   deleteCartQuantity,
   getCartItem} from '../../data/cart.js';
+
 import { products,getProduct } from '../../data/products.js';
 import { getDliveryOptions ,deliveryOptions } from '../../data/deliveryOptions.js';
-import { fixmoneyDesimal} from '../money.js';
+import { fixmoneyDesimal} from '../../utils/money.js';
 import { UpdatePaymentSummry } from './paymentSummary.js';
 import dayjs from "https://unpkg.com/supersimpledev@8.5.0/dayjs/esm/index.js";
-
 
 export function updateOrderSummary() {
 let carthtml = "";
