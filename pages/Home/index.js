@@ -2,14 +2,21 @@ import { products, loadProductFatch } from "../../data/products.js";
 import { fixmoneyDesimal } from "../../utils/money.js";
 import { addToCart, cart, totalCartItem } from "../../data/cart.js";
 import "../../utils/bootstrap.js";
+import  {renderHeader} from '../../utils/header.js';
+
 //show currrent cart's item quantity
 
 // loadProducts(renderProduct);
 loadProductFatch().then(() => {
   renderProduct();
 });
+
+
+
+
 function renderProduct() {
-  document.querySelector(".total-items-in-cart").innerText = totalCartItem();
+   const total = totalCartItem(); 
+  renderHeader(total);
 
   let productHtml = "";
   products.forEach((product) => {

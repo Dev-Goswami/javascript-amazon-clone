@@ -1,8 +1,11 @@
 import { updateOrderSummary, orderSummaryClickEvent } from "./orderSummary.js";
 import { loadProductFatch } from "../../data/products.js";
+import { getCartItem } from "../../data/cart.js";
 // import "./backendPrectic.js";
 import "../../utils/bootstrap.js";
+import { renderHeader } from "../../utils/header.js";
 
+renderHeader(getCartItem());
 loadProductFatch().then(() => {
   updateOrderSummary();
 

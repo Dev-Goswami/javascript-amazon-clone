@@ -3,52 +3,25 @@ import { getDliveryOptions } from "../../data/deliveryOptions.js";
 import { getProduct } from "../../data/products.js";
 import { fixmoneyDesimal } from "../../utils/money.js";
 
-
-
-
-
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
- export function UpdatePaymentSummry() {
-
-  let total=0;
+export function UpdatePaymentSummry() {
+  let total = 0;
   let totalPriceCents = 0;
   let totalDeliveryCostCents = 0;
-  
+
   //total calculation from cart items
   cart.forEach((item) => {
     total += item.quantity;
     const product = getProduct(item.id);
-       totalPriceCents += item.quantity * product.priceCents;
-    
-      const deliveryOption = getDliveryOptions(item.deliveryOptionId);
-    
-      totalDeliveryCostCents += deliveryOption.priceCents;
+    totalPriceCents += item.quantity * product.priceCents;
+
+    const deliveryOption = getDliveryOptions(item.deliveryOptionId);
+
+    totalDeliveryCostCents += deliveryOption.priceCents;
   });
 
   let totalMoneyBeforeTax = totalPriceCents + totalDeliveryCostCents;
   let EstimatedTax = totalMoneyBeforeTax * 0.1;
   let totalMoneyAfterTax = totalMoneyBeforeTax + EstimatedTax;
-
 
   const paymmentSummaryHTML = `
           <div class="payment-summary-title">
@@ -83,14 +56,51 @@ import { fixmoneyDesimal } from "../../utils/money.js";
           <button class="place-order-button button-primary js-place-order-button">
             Place your order
           </button>`;
-          
-  
-  const paymentSummary = document.querySelector('.js-payment-summary').innerHTML = paymmentSummaryHTML;
+
+  const paymentSummary = (document.querySelector(
+    ".js-payment-summary",
+  ).innerHTML = paymmentSummaryHTML);
   document.querySelector(".total-items-in-cart").innerText = total;
 
-  // document.querySelector('.js-place-order-button').addEventListener('click',()=>{
-  //    fetch('https://supersimplebackend.dev/orders')
-  // })
+  document
+    .querySelector(".js-place-order-button")
+    .addEventListener("click", async () => {
+      window.location.href = "orders.html";
+      try {
+        const response = await fetch("https://supersimplebackend.dev/orders", {
+          method: "POST", // Changed to uppercase "POST" for standard convention
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // Changed "Cart" to "cart" to match the expected API parameter
+          body: JSON.stringify({ cart: cart }),
+        });
 
+        if (!response.ok) {
+          throw new Error(`Response status: ${response.status}`);
+        }
 
+        const order = await response.json();
+      } catch (error) {
+        console.error("Unexpected Error:", error);
+      }
+    });
+  // document
+  //   .querySelector(".js-place-order-button")
+  //   .addEventListener("click", async () => {
+  //     try {
+  //       const response = await fetch("https://supersimplebackend.dev/orders", {
+  //         method: "Post",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ Cart: cart }),
+  //       });
+  //       const order = await response.json();
+  //     } catch {
+  //       console.error(
+  //         "Unaecsepted Error when sending https://supersimplebackend.dev/orders",
+  //       );
+  //     }
+  //   });
 }
