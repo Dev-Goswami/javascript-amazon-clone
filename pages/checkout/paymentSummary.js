@@ -1,18 +1,42 @@
-import { cart } from "../../data/cart.js";
+import { cart, totalCartItem } from "../../data/cart.js";
 import { getDliveryOptions } from "../../data/deliveryOptions.js";
 import { getProduct } from "../../data/products.js";
 import { fixmoneyDesimal } from "../../utils/money.js";
 
+
+
+
+
+    
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  export function UpdatePaymentSummry() {
 
-  let total = 0;
+  let total=0;
   let totalPriceCents = 0;
   let totalDeliveryCostCents = 0;
   
   //total calculation from cart items
   cart.forEach((item) => {
     total += item.quantity;
-
     const product = getProduct(item.id);
        totalPriceCents += item.quantity * product.priceCents;
     
@@ -21,34 +45,52 @@ import { fixmoneyDesimal } from "../../utils/money.js";
       totalDeliveryCostCents += deliveryOption.priceCents;
   });
 
-  document.querySelectorAll(".total-items-in-cart").forEach((text) => {
-    text.innerText = total;
-  
-    
-  });
-
-  
   let totalMoneyBeforeTax = totalPriceCents + totalDeliveryCostCents;
   let EstimatedTax = totalMoneyBeforeTax * 0.1;
   let totalMoneyAfterTax = totalMoneyBeforeTax + EstimatedTax;
 
-  const paymentSummary = document.querySelector('.js-payment-summary');
 
+  const paymmentSummaryHTML = `
+          <div class="payment-summary-title">
+            Order Summary
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Items (${total}):</div>
+            <div class="payment-summary-money totalItemsPrice">$${fixmoneyDesimal(totalPriceCents)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Shipping &amp; handling:</div>
+            <div class="payment-summary-money">${fixmoneyDesimal(totalDeliveryCostCents)}</div>
+          </div>
+
+          <div class="payment-summary-row subtotal-row">
+            <div>Total before tax:</div>
+            <div class="payment-summary-money">$${fixmoneyDesimal(totalMoneyBeforeTax)}</div>
+          </div>
+
+          <div class="payment-summary-row">
+            <div>Estimated tax (10%):</div>
+            <div class="payment-summary-money EstimatedTax">$${fixmoneyDesimal(EstimatedTax)}</div>
+          </div>
+
+          <div class="payment-summary-row total-row">
+            <div>Order total:</div>
+            <div class="payment-summary-money">$${fixmoneyDesimal(totalMoneyAfterTax)}</div>
+          </div>
+
+          <button class="place-order-button button-primary js-place-order-button">
+            Place your order
+          </button>`;
+          
   
-  const updataTaxt = (paymentSummary,slector, value) => {
-    const HTMltag = paymentSummary.querySelector(slector);
-    if (HTMltag) {
-      HTMltag.innerText = fixmoneyDesimal(value);
-    } else {
-      console.error(`not found ${slector} `);
-    }
-  };
+  const paymentSummary = document.querySelector('.js-payment-summary').innerHTML = paymmentSummaryHTML;
+  document.querySelector(".total-items-in-cart").innerText = total;
 
-  updataTaxt(paymentSummary,".totalItemsPrice", totalPriceCents);
-  updataTaxt(paymentSummary,".totalShipingCost", totalDeliveryCostCents);
-  updataTaxt(paymentSummary,".totalMoneyBeforeTax", totalMoneyBeforeTax);
-  updataTaxt(paymentSummary,".EstimatedTax", EstimatedTax);
-  updataTaxt(paymentSummary,".totalMoneyAfterTax", totalMoneyAfterTax);
+  // document.querySelector('.js-place-order-button').addEventListener('click',()=>{
+  //    fetch('https://supersimplebackend.dev/orders')
+  // })
 
-  //   after calculate then save it inot local
+
 }
