@@ -35,4 +35,6 @@ testing useing Jesmin Framwork this is amazing journy to understnad how thing wo
 #### add(num1, num2)
 
 Takes two numbers and returns the sum.
+<img scr='images/assets/amazon_logo.png'>
+
 
