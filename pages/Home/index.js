@@ -5,9 +5,10 @@ import "../../utils/bootstrap.js";
 import  {renderHeader} from '../../utils/header.js';
 
 //show currrent cart's item quantity
-
+document.querySelector('.js-amazon-header').innerHTML = renderHeader();
 // loadProducts(renderProduct);
 loadProductFatch().then(() => {
+   
   renderProduct();
 });
 
@@ -92,5 +93,6 @@ function homePageClickEvent(event) {
     if (selectedQuntity) selectedValue = Number(selectedQuntity.value);
     addToCart(productId, selectedValue); //add prodcut into cart  with quantity localy
     document.querySelector(".total-items-in-cart").innerText = totalCartItem();
+    
   }
 }

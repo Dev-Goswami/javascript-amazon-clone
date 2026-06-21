@@ -1,4 +1,7 @@
-export function renderHeader(total) {
+import { totalCartItem } from "../data/cart.js";
+
+export function renderHeader() {
+  
   const headerHtml = `
      <div class="amazon-header-left-section">
         <a href="amazon.html" class="header-link">
@@ -25,13 +28,12 @@ export function renderHeader(total) {
 
         <a class="cart-link header-link" href="checkout.html">
           <img class="cart-icon" src="images/icons/cart-icon.png">
-          <div class="cart-quantity total-items-in-cart">${total}</div>
+          <div class="cart-quantity total-items-in-cart">${totalCartItem()}</div>
   
           <div class="cart-text">Cart</div>
         </a>
       </div>`;
 
-  return document.querySelectorAll(".js-amazon-header").forEach((header) => {
-    header.innerHTML = headerHtml;
-  });
+  return  headerHtml;
+
 }

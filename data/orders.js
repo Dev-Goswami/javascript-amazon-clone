@@ -4,11 +4,11 @@ import { getProduct } from "./products.js";
 import { getDliveryOptions } from "./deliveryOptions.js";
 import "../utils/bootstrap.js";
 import { updateOrderSummary } from "../pages/checkout/orderSummary.js";
-
+import { renderHeader } from "../utils/header.js";
 // let orders = JSON.parse(localStorage.getItem("orders")) || [];
 
 //order class
-class Order {
+ export class Order {
   constructor({ id, orderTime, totalPriceCents, products }) {
     this.id = id;
     this.orderTime = orderTime;
@@ -30,9 +30,13 @@ class Order {
     return new Order(data);
   }
 
-  // Saving
-
-  // Loading ⭐ reconstruct every plain object back into Order instance
+  getProduct(productId) {
+    const rProduct = this.products.find(
+      (product) => product.productId === productId,
+    );
+    if (rProduct) return rProduct;
+    console.log("Product is not findout inside order");
+  }
 }
 
 export let orders = JSON.parse(localStorage.getItem("orders") || "[]").map(
@@ -41,14 +45,13 @@ export let orders = JSON.parse(localStorage.getItem("orders") || "[]").map(
 
 function saveIntoLocal() {
   localStorage.setItem("orders", JSON.stringify(orders.map((o) => o.toJSON())));
-
 }
 
 function arrivingOn(deliveryOptionId) {
   const delivery = getDliveryOptions(deliveryOptionId);
   const arrivingDate = dayjs().add(delivery.deliveryDays, "days");
 
-  return arrivingDate.format("dddd, MMMM D");
+  return arrivingDate.format("dddd MMMM D");
 }
 
 export function creatOrder() {
@@ -77,5 +80,17 @@ export function creatOrder() {
   saveIntoLocal();
 
   clearCart();
+  renderHeader();
   updateOrderSummary();
 }
+
+export function getOrder(orderId) {
+  const ROrder = orders.find((order) => order.id === orderId);
+  if (ROrder) {
+    return ROrder;
+  }
+  console.error("Order Object is not findout ");
+}
+
+
+

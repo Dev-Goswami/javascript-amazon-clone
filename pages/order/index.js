@@ -2,8 +2,10 @@ import { orders } from "../../data/orders.js";
 import { getProduct, loadProductFatch } from "../../data/products.js";
 import { fixmoneyDesimal } from "../../utils/money.js";
 import "../../utils/bootstrap.js";
-
+import { renderHeader } from "../../utils/header.js";
+document.querySelector('.js-amazon-header').innerHTML = renderHeader();
 loadProductFatch().then(() => {
+   
   renderOrder();
 });
 
@@ -33,7 +35,7 @@ function renderOrder() {
           </div>
 
           <div class="order-details-grid">
-          ${orderProducts(order.products)}
+          ${orderProducts(order.products,order.id)}
           </div>
         </div>`;
   });
@@ -41,7 +43,7 @@ function renderOrder() {
   document.querySelector(".js-orders-grid").innerHTML = ordersHtml;
 }
 
-function orderProducts(products) {
+function orderProducts(products,orderId) {
   let productsHtml = "";
   products.forEach((element) => {
     const product = getProduct(element.productId);
@@ -68,7 +70,7 @@ function orderProducts(products) {
                 </div>
 
                 <div class="product-actions">
-                <a href="tracking.html">
+                <a href="tracking.html?orderId=${orderId}&productId=${element.productId}">
                     <button class="track-package-button button-secondary">
                     Track package
                     </button>

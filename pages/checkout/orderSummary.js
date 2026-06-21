@@ -4,7 +4,8 @@ import {cart,
   updateCartQuantity,
   changeCartState,
   deleteCartQuantity,
-  getCartItem} from '../../data/cart.js';
+  getCartItem,
+  totalCartItem} from '../../data/cart.js';
 
 import { products,getProduct } from '../../data/products.js';
 import { getDliveryOptions ,deliveryOptions } from '../../data/deliveryOptions.js';
@@ -76,6 +77,7 @@ let carthtml = "";
   });
 
   document.querySelector(".js-order-summary").innerHTML = carthtml;
+  document.querySelector
   UpdatePaymentSummry();
 
 }
@@ -166,6 +168,9 @@ export function orderSummaryClickEvent(event){
       changeCartState(productId);
 
       updateOrderSummary();
+
+      // this line update cart itme and we cart only in orderSummary file only tow click event upate quantity or delete quantity
+      document.querySelector('.total-items-in-cart').innerText = totalCartItem();
       // UpdatePaymentSummry();
       return;
     }
@@ -205,6 +210,7 @@ export function orderSummaryClickEvent(event){
       const productId = deleteQuntity.dataset.productId;
       deleteCartQuantity(productId);
       updateOrderSummary();
+      document.querySelector('.total-items-in-cart').innerText = totalCartItem();
       // UpdatePaymentSummry();
       return;
     }
