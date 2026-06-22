@@ -1,9 +1,10 @@
 
 .amazon-header {
+  min-height: 70px;
   background-color: white;
   color: #4f9e30;
-  padding: 5px 15px 4px 15px;
-  
+  padding-left:  15px;
+  padding-right: 15px;
   border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   display: flex;
   align-items: center;
@@ -17,20 +18,21 @@
 }
 
 .amazon-header-left-section {
-  /* margin-top: 5px; */
-  max-height: 95%;
+ max-height: 60px;
   width: 250px;
+ padding-bottom: 6px;
 }
 
 @media (max-width: 800px) {
   .amazon-header-left-section {
     width: unset;
+    
   }
 }
 
 .header-link {
   display: flex;
-  padding: 6px;
+  height: 95%;
   border-radius: 2px;
   cursor: pointer;
   text-decoration: none;
@@ -125,6 +127,7 @@
 .orders-link {
   color: black;
   display: block;
+  padding: 10px 8px;
 }
 
 .returns-text {
@@ -139,6 +142,7 @@
 }
 
 .cart-link {
+  padding: 10px 8px;
   color: black;
   display: flex;
   align-items: center;
