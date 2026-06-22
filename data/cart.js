@@ -32,7 +32,7 @@ export function addToCart(productId, selectedValue = 1) {
 
   if (cartItem) cartItem.quantity += selectedValue;
   else {
-    cart.push({
+    cart.unshift({
       id: productId,
       quantity: selectedValue,
       deliveryOptionId: "1",
